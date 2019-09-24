@@ -12,16 +12,15 @@ import java.util.Collections;
 public class Util {
     public static boolean isSave(File f) {
         String[] name = f.getName().split("\\.");
-        if (Util.isFile(f) && name.length == 2 && name[0].equals("saveati") && isSaveNum(name[1])) return true;
+        if (name.length == 2 && name[0].equals("saveati") && isSaveNum(name[1])) return true;
         return false;
     }
 
     public static boolean isSaveFolder(File f) {
-        if (!isDirectory(f)) return false;
         File[] files = f.listFiles();
         if (files == null) return false;
         for (File file : files) {
-            if (isSave(file)) return true;
+            if (isSave(file) && file.isFile()) return true;
         }
         return false;
     }
@@ -125,13 +124,5 @@ public class Util {
         } catch (IOException e) {
         }
         return retval;
-    }
-
-    public static boolean isFile(File file) {
-        return file.getName().contains(".");
-    }
-
-    public static boolean isDirectory(File file) {
-        return !isFile(file);
     }
 }

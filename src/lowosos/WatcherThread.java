@@ -56,7 +56,7 @@ class WatcherThread extends Thread {
                         Path path = dir.resolve(event.context().toString());
                         Path relative = pathToDir.relativize(path);
                         int length = relative.toString().split("\\\\").length;
-                        if (length == 1 && Util.isDirectory(path.toFile())) { // change in root dir, changed is a dir
+                        if (length == 1) { // change in root dir, changed is a dir
                             FileWrapper folder = new FileWrapper(path.toFile());
                             if ((event.kind() == ENTRY_CREATE)&& folder.getFile().isDirectory()) { // if a folder was created
                                 try {
@@ -75,7 +75,7 @@ class WatcherThread extends Thread {
                                 wList.remove(wIndex);
                             }
                         }
-                        else if (length == 2 && Util.isFile(path.toFile())) { // change in direct subdir of root, changed is a file
+                        else if (length == 2) { // change in direct subdir of root, changed is a file
                             File f = path.toFile();
                             if (f.getName().equals("description.txt")) { // if a description was changed
                                 FileWrapper fw = wList.get(wList.indexOf(new FileWrapper(new File(f.getParent()))));
@@ -96,7 +96,7 @@ class WatcherThread extends Thread {
                                     }
                                 }
                                 else if (event.kind() == ENTRY_DELETE) { // if a save file has been deleted
-                                    if (!Util.isSaveFolder(parent.getFile())) {
+                                    if (!Util.isSaveFolder(parent.getFile()) || !Util.getSaveLevelsInFolder(parent.getFile()).isEmpty()) {
                                         sfList.remove(parent);
                                     }
                                 }
